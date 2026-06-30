@@ -1,6 +1,6 @@
-# Aletheia — Offline Clinical Decision Support AI
+# Aletheia - Offline Clinical Decision Support AI
 
-Aletheia is an offline-first clinical decision support system designed for district hospitals and health centres in sub-Saharan Africa. It runs entirely on-device using a quantized language model via [llama.cpp](https://github.com/ggerganov/llama.cpp) — no internet connection is required at any point.
+Aletheia is an offline-first clinical decision support system designed for district hospitals and health centres in sub-Saharan Africa. It runs entirely on-device using a quantized language model via [llama.cpp](https://github.com/ggerganov/llama.cpp) - no internet connection is required at any point.
 
 **Aletheia does not diagnose. It supports the clinician's reasoning through a structured three-stage pipeline.**
 
@@ -28,22 +28,22 @@ Aletheia guides a clinician through a structured reasoning process for a patient
 [Clinician] Make the management decision
 ```
 
-### Stage 1 — Follow-up Questions
+### Stage 1: Follow-up Questions
 After symptoms are entered, Aletheia produces:
-- **Follow-up questions** (primary output) — targeted questions to narrow the differential
-- Tentative differential (secondary, context only — not yet actionable)
+- **Follow-up questions** (primary output) - targeted questions to narrow the differential
+- Tentative differential (secondary, context only - not yet actionable)
 - Red flags requiring immediate escalation
 
-### Stage 2 — Investigation Recommendations
+### Stage 2: Investigation Recommendations
 After the clinician answers the follow-up questions, Aletheia produces:
-- **Recommended investigations** (primary output) — specific tests in priority order
+- **Recommended investigations** (primary output) - specific tests in priority order
 - Working differential (secondary, context explaining why these tests were chosen)
 
 The system does not simulate or perform tests. The clinician performs them in the real world.
 
-### Stage 3 — Clinical Advisory
+### Stage 3: Clinical Advisory
 After the clinician enters the actual investigation results, Aletheia produces:
-- **Clinical advisory** — likely diagnosis, management options, suggested first step
+- **Clinical advisory** - likely diagnosis, management options, suggested first step
 - All output is framed as advisory. The treating clinician makes every final management decision.
 
 ---
@@ -154,4 +154,4 @@ The model is prompted to consider availability of investigations at district hos
 
 Aletheia is a research prototype developed at Soroti University, Uganda, in collaboration with Arapai Technologies International Limited. It is presented at ADTC 2026.
 
-**Aletheia is not a licensed medical device.** It does not replace clinical judgement. Every output — including the final Stage 3 advisory — must be evaluated and acted upon by a qualified healthcare professional. The treating clinician retains full authority over all patient management decisions.
+**Aletheia is not a licensed medical device.** It does not replace clinical judgement. Every output - including the final Stage 3 advisory - must be evaluated and acted upon by a qualified healthcare professional. The treating clinician retains full authority over all patient management decisions.
