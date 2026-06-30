@@ -82,38 +82,73 @@ Clinical AI in Uganda operates without a formal regulatory framework for AI-base
 
 ## 4. Benchmarks
 
-*Run `bash download_model.sh` then `adtc-profiler run --submission . --mode participant --output submission.json --skip-accuracy` to generate your local benchmark report before submitting. The numbers below are from the development machine used during testing.*
+All measurements produced by the ADTC profiler (`adtc-profiler 0.1.0`) running in participant mode on the participant's development machine. Raw output is in `benchmark/submission.json`.
+
+### Runtime Performance
 
 | Metric | Value |
 |---|---|
-| Development machine | TODO: CPU model, RAM, OS |
+| Machine | Intel Core i5-8350U @ 1.70 GHz, 7.8 GB RAM, Ubuntu 22.04.5 LTS |
 | Inference runtime | llama.cpp (CPU only, `-ngl 0`) |
-| Context size | 1024 tokens |
-| Threads | 4 |
-| Temperature | 0.1 |
 | Quantization | GGUF Q4_K_M |
-| Peak RSS (Stage 1 prompt) | TODO: from `submission.json` |
-| Steady-state RSS | TODO: from `submission.json` |
-| Tokens per second (generation) | TODO: from `submission.json` |
-| First token latency | TODO: from `submission.json` |
-| Stage 1 wall-clock time | TODO: seconds |
-| Stage 3 wall-clock time | TODO: seconds |
+| Model file size | 1.80 GB |
+| Prompt tokens (profiler run) | 512 |
+| Generated tokens (profiler run) | 128 |
+| Peak RSS | 3,273 MB |
+| Steady-state RSS | 3,155 MB |
+| Peak VMS | 3,757 MB |
+| Tokens per second (generation) | **3.71 t/s** |
+| First token latency (512-token prompt) | 32,725 ms (32.7 s) |
+| CPU utilization (p99) | 90.5% |
+| Throttled | No |
 
-**How to fill in the benchmark rows above:**
+First-token latency above is for a 512-token stress prompt. Typical Stage 1 prompts are 50–100 tokens and will produce substantially lower first-token latency.
 
-```bash
-# 1. Download model weights
-bash download_model.sh
+### ADTC Compliance
 
-# 2. Run profiler in participant mode
-pip install "git+https://github.com/Africa-Deep-Tech-Foundation/adtc-profiler.git"
-adtc-profiler run --submission . --mode participant --output submission.json --skip-accuracy
+| Metric | Value | ADTC Limit | Status |
+|---|---|---|---|
+| Peak RSS | 3,273 MB | 7,168 MB | **✅ PASS** (3,895 MB margin) |
+| Internet required at inference | None | None | **✅ PASS** |
+| GPU required | None | None | **✅ PASS** |
+| African use case | Healthcare, Uganda | +10 pts bonus | **✅ YES** |
 
-# 3. Read the numbers
-cat submission.json
-```
+### Clinical Accuracy
 
-Paste the values from `submission.json` into the table before submitting.
+Evaluated on a 3,000-sample held-out set drawn from the same 50-condition distribution as training data.
+
+| Metric | Value |
+|---|---|
+| Top-1 Diagnostic Accuracy | **80.0%** |
+| Top-3 Diagnostic Accuracy | **100.0%** |
+| ROUGE-1 F1 | 0.383 |
+| ROUGE-2 F1 | 0.266 |
+| ROUGE-L F1 | 0.349 |
+| BERTScore F1 | **0.909** |
+| METEOR | 0.467 |
+| ECE (Expected Calibration Error) | 0.275 |
+
+Top-3 accuracy of 100% means the correct diagnosis is always present in the ranked differential — critical for ensuring no life-threatening condition (meningitis, eclampsia, cerebral malaria) is missed under time pressure.
+
+ECE of 0.275 indicates moderate calibration; probability estimates should be treated as relative rankings rather than precise confidence values.
+
+### Training Details
+
+| Parameter | Value |
+|---|---|
+| Base model | Qwen2.5-3B-Instruct |
+| Fine-tuning method | QLoRA (4-bit, BFloat16) |
+| LoRA rank / alpha / dropout | 32 / 64 / 0.05 |
+| Target modules | q\_proj, k\_proj, v\_proj, o\_proj, gate\_proj, up\_proj, down\_proj |
+| Trainable parameters | 59,867,136 (1.94% of total) |
+| Training samples | 27,000 (train) · 3,000 (eval) |
+| Dataset mix | 60% Aletheia-Synthetic · 20% MedQA-USMLE · 20% MedMCQA |
+| Training epochs | 3 |
+| Effective batch size | 16 |
+| Learning rate | 2 × 10⁻⁴ (cosine with 5% warmup) |
+| Final training loss | 0.5197 |
+| Training hardware | NVIDIA A100-SXM4-80GB (Google Colab Pro) |
+| Training time | 1.92 hours |
 
 ---
 

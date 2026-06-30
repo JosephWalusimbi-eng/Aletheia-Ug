@@ -25,8 +25,8 @@
     }
   ],
   "model": {
-    "name": "aletheia_q4km",
-    "runtime": "llama.cpp (CPU only, -ngl 0)p",
+    "name": "Aletheia-Q4_K_M",
+    "runtime": "llama.cpp (CPU only, -ngl 0)",
     "quantization": "GGUF Q4_K_M",
     "parameters_estimate": "3B",
     "packaging": "binary_bundle"

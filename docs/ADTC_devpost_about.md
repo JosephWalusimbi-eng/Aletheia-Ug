@@ -19,23 +19,46 @@ That is exactly what diagnosis is.
 
 ## What it does
 
-Aletheia is an offline-first clinical decision support system. A clinical 
-officer types in a patient's symptoms and duration. Aletheia returns:
-- **Ranked differential diagnoses** with probability estimates and severity 
-  ratings, prioritised for African disease epidemiology
-- **Priority investigations** available at district hospital level
-- **Clinical rationale** explaining the reasoning behind each diagnosis
-- **Red flags** that require immediate escalation
-- **Follow-up questions** to narrow the differential
-- **Immediate management hints** appropriate for resource-limited settings
+Aletheia is an offline-first clinical decision support system that guides 
+a clinician through three ordered stages of reasoning — mirroring the 
+actual clinical thought process rather than jumping straight to a diagnosis.
 
-It covers 50 disease conditions with elevated prevalence across sub-Saharan 
-Africa; including cerebral malaria, bacterial meningitis, eclampsia, 
-postpartum haemorrhage, severe acute malnutrition, neonatal sepsis, 
-snake envenomation, visceral leishmaniasis, and tuberculosis.
-It runs entirely on an Intel Core i5, 8 GB DDR4 laptop/computer
-Ubuntu 22.04; with no internet connection, no GPU, and no cloud 
-dependency. Peak RAM usage is approximately 3,630 MB.
+**Stage 1 — Initial assessment**
+The clinician enters the patient's symptoms, duration, age group, and sex. 
+Aletheia returns a tentative ranked differential with probability estimates 
+and severity ratings, 3–5 targeted follow-up questions to narrow the 
+differential, and red flags that require immediate escalation. Diagnostic 
+tests are deliberately withheld at this stage — the model is explicitly 
+instructed not to recommend investigations until the clinician has answered 
+the follow-up questions.
+
+**Stage 2 — Investigation recommendations**
+After the clinician provides answers to the follow-up questions, Aletheia 
+returns a prioritised list of investigations available at district hospital 
+level. This is the primary output at this stage. A working differential is 
+included as supporting context only — the model is instructed not to state 
+a confirmed diagnosis before test results are in hand.
+
+**Stage 3 — Clinical advisory**
+After the clinician enters the real investigation results, Aletheia returns 
+a management advisory: the most likely diagnosis, diagnostic confidence, 
+management options for the clinician to consider, a suggested first step, 
+and further investigations if uncertainty remains. Every Stage 3 output 
+includes an explicit advisory note stating that the treating clinician 
+retains full decision authority. Aletheia does not prescribe. It advises.
+
+Stage ordering is enforced in both graphical and terminal interfaces — 
+it is not possible to skip to Stage 3 without completing Stages 1 and 2.
+
+The system covers 50 disease conditions with elevated prevalence across 
+sub-Saharan Africa, including cerebral malaria, bacterial meningitis, 
+eclampsia, postpartum haemorrhage, severe acute malnutrition, neonatal 
+sepsis, snake envenomation, visceral leishmaniasis, and tuberculosis.
+
+It runs entirely on an Intel Core i5, 8 GB DDR4 laptop running Ubuntu 22.04, 
+with no internet connection, no GPU, and no cloud dependency. Measured peak 
+RAM usage is 3,273 MB — leaving over 3,800 MB of headroom within the 8 GB 
+hardware ceiling.
 
 ## How we built it
 
@@ -58,11 +81,14 @@ to Q4_K_M (1.80 GB) using llama.cpp's two-step pipeline: F16 conversion
 followed by llama-quantize. The inference engine is llama.cpp compiled for 
 CPU-only operation.
 
-**Interface:** Two interfaces are provided. A Python terminal chatbot using 
-the Rich library for clean clinical formatting, with a single-query CLI 
-mode for scripting and integration; and a Gradio-based web UI for clinical 
-officers who prefer a browser-based interaction, running entirely on 
-localhost with no internet dependency.
+**Interface:** Three interfaces share a single inference layer. A 
+Gradio-based web UI running on localhost enforces stage ordering through 
+button state — the Stage 2 button is disabled until Stage 1 succeeds, and 
+Stage 3 is disabled until Stage 2 succeeds, making it impossible to skip 
+steps. An interactive terminal CLI (`cli.py`) walks the clinician through 
+all three stages sequentially using Rich-formatted output. A single-stage 
+CLI (`run.py`) accepts `--stage` and `--extra` arguments for scripting and 
+profiler integration.
 
 ## Challenges we ran into
 
@@ -84,9 +110,13 @@ broader question styles. Loss alone is an incomplete proxy for clinical
 utility - accuracy is what matters.
 
 **CPU inference latency:** llama.cpp on CPU is slower than GPU inference. 
-On the ADTC target hardware, inference takes 2–4 minutes per query — 
-acceptable for clinical use where a few minutes of thinking is normal, 
-but something we are optimising.
+On our development machine (Intel Core i5-8350U — older than the ADTC 
+target), a 512-token prompt produces a first token in 32.7 seconds, after 
+which generation proceeds at 3.71 tokens per second. On the ADTC target 
+hardware (i5 10th–12th gen) these numbers will improve. A full three-stage 
+case takes roughly 2–3 minutes end-to-end — acceptable for a clinical 
+consultation where structured reasoning time is normal, and substantially 
+faster than waiting for a specialist referral.
 
 **Early-stage multilingual fine-tuning:** We began extending Aletheia to 
 Kiswahili through continued fine-tuning from the existing LoRA adapter. 
@@ -110,10 +140,9 @@ correct diagnosis.
 compressed to under 2 GB without meaningful quality loss. It fits on a 
 USB drive.
 
-**3,630 MB peak RAM** - 3,538 MB below the ADTC ceiling with over 3.5 GB 
-to spare. This is not a tight squeeze - it is a comfortable margin that 
-leaves room for the operating system, other applications, and future model 
-improvements.
+**3,273 MB measured peak RAM** - 3,895 MB below the ADTC ceiling. This is 
+not a tight squeeze — it is a comfortable margin that leaves room for the 
+operating system, other applications, and future model improvements.
 
 **BERTScore-F1 of 0.909** - the model's clinical reasoning text is 
 semantically very close to expert reference answers. It is not just naming 
