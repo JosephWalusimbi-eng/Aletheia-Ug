@@ -99,8 +99,8 @@ python3 run.py --symptoms "fever, headache" --duration 3 --json
 - Python 3.11 (minimum; the ADTC profiler requires ≥ 3.11, Gradio 6.x requires ≥ 3.10, Python 3.12 untested)
 - [llama.cpp](https://github.com/ggerganov/llama.cpp) built locally (`llama-cli` binary)
 - A GGUF model file (e.g. `aletheia_q4km.gguf`)
-- `gradio` (web UI only) — installed automatically on first run
-- `rich` (terminal UI, optional) — `pip install rich`
+- `gradio` (web UI only) - installed automatically on first run
+- `rich` (terminal UI, optional) - `pip install rich`
 
 ### Configuration
 Create `inference/config.json`:
