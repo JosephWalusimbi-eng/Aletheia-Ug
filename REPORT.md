@@ -5,11 +5,11 @@
 
 ## 1. Problem
 
-District hospitals and rural health centres in sub-Saharan Africa handle a broad and severe case mix — meningitis, cerebral malaria, TB, obstetric emergencies, snakebite — often with a single clinician on duty, no specialist support, and unreliable or no internet connectivity. Clinical decision support tools that exist today assume a cloud connection and a general-purpose workstation. They are unusable at the point of care in these settings.
+District hospitals and rural health centres in sub-Saharan Africa handle a broad and severe case mix - meningitis, cerebral malaria, TB, obstetric emergencies, snakebite - often with a single clinician on duty, no specialist support, and unreliable or no internet connectivity. Clinical decision support tools that exist today assume a cloud connection and a general-purpose workstation. They are unusable at the point of care in these settings.
 
 The result is that clinicians must reason through complex, overlapping differentials entirely from memory, with no structured second opinion available. Diagnostic delays and missed investigations are a direct consequence.
 
-**Target user:** A clinician — clinical officer, nurse, or medical officer — working alone at a district hospital or health centre in Uganda or a similar East/Central African setting. They have a basic laptop and no reliable internet. They need structured reasoning support, not a remote consultation.
+**Target user:** A clinician - clinical officer, nurse, or medical officer - working alone at a district hospital or health centre in Uganda or a similar East/Central African setting. They have a basic laptop and no reliable internet. They need structured reasoning support, not a remote consultation.
 
 **What Aletheia does not claim:** It does not diagnose. It does not prescribe. It supports the clinician's reasoning through a three-stage pipeline that ends with an advisory output explicitly framed as the clinician's decision to make.
 
