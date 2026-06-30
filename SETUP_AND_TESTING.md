@@ -526,4 +526,4 @@ This is a font/encoding issue in older Windows terminals. Either:
 
 ### Stage 2 or Stage 3 button stays greyed out after Step 1
 
-This means Stage 1 returned an error (the inference call failed). Check the text output in the follow-up questions panel — it will show the error message. The most common cause is an incorrect path in `config.json`.
+This means Stage 1 returned an error (the inference call failed). Check the text output in the follow-up questions panel - it will show the error message. The most common cause is an incorrect path in `config.json`.
