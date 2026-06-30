@@ -31,7 +31,7 @@ This structure reflects actual clinical reasoning protocol and prevents the mode
 
 ### Model choice
 
-The model is a GGUF-quantized language model selected for its performance on structured JSON output and medical reasoning tasks within the constraints of a CPU-only district hospital laptop. The Q4_K_M quantization was chosen as the balance point between output quality and memory footprint — fitting within 8 GB RAM while maintaining coherent, schema-valid JSON responses.
+The model is a GGUF-quantized language model selected for its performance on structured JSON output and medical reasoning tasks within the constraints of a CPU-only district hospital laptop. The Q4_K_M quantization was chosen as the balance point between output quality and memory footprint - fitting within 8 GB RAM while maintaining coherent, schema-valid JSON responses.
 
 **Alternatives evaluated:**
 - Q5_K_M: better quality but pushes closer to the 8 GB RAM ceiling on context sizes above 1024 tokens; rejected for margin of safety.
