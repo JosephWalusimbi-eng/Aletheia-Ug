@@ -1,4 +1,4 @@
-# Aletheia — Technical Report
+# Aletheia - Technical Report
 ### ADTC 2026 Submission · Healthcare / Medical Track
 
 ---
