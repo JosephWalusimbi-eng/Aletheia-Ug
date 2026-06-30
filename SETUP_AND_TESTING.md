@@ -1,4 +1,4 @@
-# Aletheia — Setup and Testing Guide
+# Aletheia - Setup and Testing Guide
 
 This guide walks you through getting Aletheia running from scratch on both **Windows** and **Ubuntu**, then testing each of the three interfaces end-to-end.
 
@@ -8,7 +8,7 @@ This guide walks you through getting Aletheia running from scratch on both **Win
 
 There are two separate reasons for this floor:
 
-1. **Gradio 6.x** (the web UI library) requires Python 3.10 or higher — 3.9 and below will fail to install it.
+1. **Gradio 6.x** (the web UI library) requires Python 3.10 or higher - 3.9 and below will fail to install it.
 2. **The ADTC profiler** (`adtc-profiler`) explicitly requires Python ≥ 3.11. You must run the profiler locally to generate benchmark numbers before submitting. If you are on 3.10, the profiler will refuse to run.
 
 Python 3.11 satisfies both constraints. Python 3.12+ has not been tested against Aletheia's dependencies.
@@ -19,19 +19,19 @@ python --version        # Windows
 python3 --version       # Ubuntu
 ```
 
-If you see `3.10.x`, upgrade to 3.11 before proceeding — the submission step will fail otherwise.
+If you see `3.10.x`, upgrade to 3.11 before proceeding - the submission step will fail otherwise.
 
-**llama.cpp has no Python requirement.** Aletheia does not use the `llama-cpp-python` bindings package. It calls the compiled `llama-cli` binary directly via `subprocess.run()` — the binary is pure C++ and runs independently of Python entirely. The Python version you install has no effect on llama.cpp's behaviour; it only affects the Aletheia Python code and the profiler.
+**llama.cpp has no Python requirement.** Aletheia does not use the `llama-cpp-python` bindings package. It calls the compiled `llama-cli` binary directly via `subprocess.run()` - the binary is pure C++ and runs independently of Python entirely. The Python version you install has no effect on llama.cpp's behaviour; it only affects the Aletheia Python code and the profiler.
 
 Aletheia has two external dependencies beyond Python:
-- **llama.cpp** — the inference runtime (`llama-cli` compiled C++ binary)
-- **A GGUF model file** — the quantized language model (`aletheia_q4km.gguf`)
+- **llama.cpp** - the inference runtime (`llama-cli` compiled C++ binary)
+- **A GGUF model file** - the quantized language model (`aletheia_q4km.gguf`)
 
 Both must be in place before any interface can run inference.
 
 ---
 
-## Part 1 — Windows Setup
+## Part 1: Windows Setup
 
 Tested on Windows 10 and Windows 11.
 
@@ -56,7 +56,7 @@ cd Aletheia
 
 Or download the ZIP from GitHub and extract it. All commands below assume you are inside the `Aletheia` folder.
 
-### 1.3 Install llama.cpp (pre-built binary — recommended)
+### 1.3 Install llama.cpp (pre-built binary - recommended)
 
 Building from source on Windows requires Visual Studio. Using a pre-built release is faster and avoids that dependency.
 
@@ -70,7 +70,7 @@ Building from source on Windows requires Visual Studio. Using a pre-built releas
    C:\Users\YourName\Downloads\llama-b5000-bin-win-cpu-x64\build\bin\llama-cli.exe
    ```
 
-**Alternative — build from source on Windows:**
+**Alternative - build from source on Windows:**
 ```
 # Requires CMake and Visual Studio Build Tools
 git clone https://github.com/ggerganov/llama.cpp
@@ -127,7 +127,7 @@ You should see `(venv)` at the start of your prompt after activation. You need t
 
 ---
 
-## Part 2 — Ubuntu Setup
+## Part 2 - Ubuntu Setup
 
 Tested on Ubuntu 22.04 LTS and Ubuntu 24.04 LTS.
 
@@ -251,11 +251,11 @@ If you see `Config OK` and a non-zero length, the configuration and import layer
 
 ---
 
-## Part 4 — Testing the Single-Stage CLI (`run.py`)
+## Part 4: Testing the Single-Stage CLI (`run.py`)
 
 This is the fastest way to verify that inference itself works end-to-end.
 
-### Stage 1 — Initial assessment and follow-up questions
+### Stage 1 - Initial assessment and follow-up questions
 
 **Windows:**
 ```
@@ -281,7 +281,7 @@ TENTATIVE DIFFERENTIAL (context only — not yet actionable):
 
 If you see follow-up questions printed before any differential, Stage 1 is working correctly.
 
-### Stage 2 — Investigation recommendations
+### Stage 2 - Investigation recommendations
 
 Take your answers to the follow-up questions from Stage 1 and pass them via `--extra`:
 
@@ -312,7 +312,7 @@ WORKING DIFFERENTIAL (context for test selection):
 
 Investigations must appear as the primary output, before the working differential.
 
-### Stage 3 — Clinical advisory
+### Stage 3: Clinical advisory
 
 Take your actual investigation results and pass them via `--extra`:
 
@@ -408,14 +408,14 @@ Stage 3 runs. Verify:
 - "Management Options for Clinician's Consideration" appears (not "Treatment Plan" or "Prescription")
 - A closing line states the clinician retains authority
 
-**Test the enforcement — skipping test results:**  
+**Test the enforcement - skipping test results:**  
 Run `cli.py` again. At the "Investigation results" prompt, press Enter without typing anything.
 
 Expected: the CLI prints a message explaining that results are required and ends the case. It must not proceed to generate an advisory without results.
 
 ---
 
-## Part 6 — Testing the Web UI (`aletheia/app.py`)
+## Part 6 - Testing the Web UI (`aletheia/app.py`)
 
 **Windows** (from inside the Aletheia folder, with venv active):
 ```
@@ -431,53 +431,53 @@ The terminal will print `Open your browser at: http://localhost:7860`. A browser
 
 ### UI walkthrough
 
-**Step 1 — Load an example case:**  
+**Step 1 - Load an example case:**  
 Scroll to "Example Cases" at the bottom and click:  
 `fever, headache, neck stiffness, vomiting | 2 days | adult | unknown`
 
 This fills the symptoms fields. Scroll back to the top.
 
-**Step 2 — Confirm Step 2 and Step 3 buttons are greyed out (disabled).**  
+**Step 2 - Confirm Step 2 and Step 3 buttons are greyed out (disabled).**  
 The labels should appear faded and clicking them should do nothing.
 
-**Step 3 — Click "Run Step 1: Assess Symptoms".**  
+**Step 3 - Click "Run Step 1: Assess Symptoms".**  
 After inference completes:
 - The left column shows follow-up questions with "Answer these questions before Step 2" instruction
 - The right column shows the tentative differential labelled "context only — not yet actionable"
 - The Step 2 button becomes clickable (no longer greyed out)
 - The Step 3 button remains greyed out
 
-**Step 4 — Enter follow-up answers:**  
+**Step 4 - Enter follow-up answers:**  
 In the "Answers to Follow-up Questions" text box type:
 ```
 Kernig sign positive, no rash, vaccinated against meningitis, no recent travel, no TB contacts
 ```
 
-**Step 5 — Click "Run Step 2: Get Investigation Recommendations".**  
+**Step 5 - Click "Run Step 2: Get Investigation Recommendations".**  
 After inference completes:
 - The left column shows recommended investigations with "Perform these before Step 3" instruction
 - The right column shows the working differential labelled "context for test selection — not a confirmed diagnosis"
 - The Step 3 button becomes clickable
 
-**Step 6 — Enter investigation results:**  
+**Step 6 - Enter investigation results:**  
 In the "Investigation Results" box type:
 ```
 CSF cloudy, WBC 2000 cells/uL 90% neutrophils, protein elevated, glucose low. Malaria RDT negative. Blood culture pending.
 ```
 
-**Step 7 — Click "Run Step 3: Get Clinical Advisory".**  
+**Step 7 - Click "Run Step 3: Get Clinical Advisory".**  
 After inference completes:
 - Output opens with "CLINICAL ADVISORY — Decision Authority: Treating Clinician" blockquote
 - A "Likely Diagnosis" section appears
 - Options are under "Management Options for Clinician's Consideration" — not a treatment order
 - Output closes with "The treating clinician retains full authority over all management decisions."
 
-**Step 8 — Test enforcement by re-running Step 1:**  
+**Step 8 - Test enforcement by re-running Step 1:**  
 Click "Run Step 1" again (with any symptoms). Verify that the Step 3 button becomes disabled again immediately after Step 1 fires. This confirms that re-running an early stage resets the later stages.
 
 ---
 
-## Part 7 — Troubleshooting
+## Part 7 - Troubleshooting
 
 ### "llama-cli not found"
 
