@@ -21,11 +21,11 @@ The result is that clinicians must reason through complex, overlapping different
 
 Aletheia enforces a three-stage clinical reasoning flow, in order:
 
-1. **Stage 1 — Initial assessment:** The model receives symptoms and patient demographics and returns a tentative differential plus 3–5 targeted follow-up questions. Tests are deliberately withheld at this stage — the clinician must gather more history first.
+1. **Stage 1: Initial assessment:** The model receives symptoms and patient demographics and returns a tentative differential plus 3–5 targeted follow-up questions. Tests are deliberately withheld at this stage — the clinician must gather more history first.
 
-2. **Stage 2 — Investigation recommendations:** After the clinician answers the follow-up questions, the model returns a prioritised list of investigations as its primary output, with a working differential as supporting context only. The model is explicitly instructed not to state a confirmed diagnosis at this stage.
+2. **Stage 2:  Investigation recommendations:** After the clinician answers the follow-up questions, the model returns a prioritised list of investigations as its primary output, with a working differential as supporting context only. The model is explicitly instructed not to state a confirmed diagnosis at this stage.
 
-3. **Stage 3 — Clinical advisory:** After the clinician enters real investigation results, the model returns a management advisory — options for consideration, not orders. The system prompt and output schema both require the model to include an advisory note explicitly stating that the treating clinician retains all decision authority.
+3. **Stage 3: Clinical advisory:** After the clinician enters real investigation results, the model returns a management advisory - options for consideration, not orders. The system prompt and output schema both require the model to include an advisory note explicitly stating that the treating clinician retains all decision authority.
 
 This structure reflects actual clinical reasoning protocol and prevents the model from short-circuiting to a diagnosis before sufficient evidence is gathered. Stage ordering is enforced in both interfaces: the web UI disables later-stage buttons until earlier stages succeed, and the terminal CLI requires non-empty input at each gate.
 
@@ -52,9 +52,9 @@ The system calls `llama-cli` (the llama.cpp binary) as an external subprocess. T
 ### Interfaces
 
 Three interfaces share a single inference layer (`inference/aletheia.py`):
-- **Web UI** (`aletheia/app.py`) — Gradio-based, enforces stage ordering via disabled buttons
-- **Terminal CLI** (`cli.py`) — sequential, requires non-empty input at each stage gate
-- **Single-stage CLI** (`run.py`) — for scripting and profiler integration; accepts `--stage` and `--extra` arguments
+- **Web UI** (`aletheia/app.py`) - Gradio-based, enforces stage ordering via disabled buttons
+- **Terminal CLI** (`cli.py`) - sequential, requires non-empty input at each stage gate
+- **Single-stage CLI** (`run.py`) - for scripting and profiler integration; accepts `--stage` and `--extra` arguments
 
 ---
 
@@ -76,7 +76,7 @@ Aletheia is designed for conditions prevalent in East and Central Africa: malari
 
 ### Regulatory framing
 
-Clinical AI in Uganda operates without a formal regulatory framework for AI-based decision support as of 2026. Aletheia is presented as a research prototype, not a licensed medical device. Every output carries explicit advisory framing. This is a design constraint as much as a legal one — the system must not produce output that a clinician could mistake for a final diagnosis or treatment order.
+Clinical AI in Uganda operates without a formal regulatory framework for AI-based decision support as of 2026. Aletheia is presented as a research prototype, not a licensed medical device. Every output carries explicit advisory framing. This is a design constraint as much as a legal one - the system must not produce output that a clinician could mistake for a final diagnosis or treatment order.
 
 ---
 
