@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0.0",
+  "profiler_version": "adtc-profiler 0.1.0",
+  "submission": {
+    "team_id": "Aletheia",
+    "domain": "healthcare_medical",
+    "language_scope": [
+      "English"
+    ],
+    "african_alpha_claim": true,
+    "budget_laptop_claim": true,
+    "submitter": {
+      "name": "Joseph Walusimbi",
+      "email": "mrjosephwalusimbi@gmail.com",
+      "github_handle": "JosephWalusimbi-eng"
+    },
+    "cross_disciplinary_pairing": {
+      "discipline": "clinical_medicine",
+      "load_bearing": true,
+      "description": "Precious Nasasara (School of Health Sciences, Soroti University) defined the 50-condition clinical scope, validated training data labels, and serves as clinical reviewer for all Aletheia outputs."
+    },
+    "test_prompts": [
+      {
+        "prompt_id": "meningitis_differential",
+        "prompt": "### System:\nYou are Aletheia, an offline-first clinical decision support AI designed for district hospitals in sub-Saharan Africa. Always respond in structured JSON format.\n\n### Instruction:\nAnalyze the patient presentation and provide a ranked differential diagnosis with probability estimates and severity ratings.\n\n### Input:\n{\"symptoms\": [\"fever\", \"headache\", \"neck stiffness\", \"vomiting\"], \"duration_days\": 2, \"patient_age_group\": \"adult\", \"sex\": \"unknown\"}\n\n### Response:\n"
+      },
+      {
+        "prompt_id": "cerebral_malaria_severity",
+        "prompt": "### System:\nYou are Aletheia, an offline-first clinical decision support AI designed for district hospitals in sub-Saharan Africa. Always respond in structured JSON format.\n\n### Instruction:\nAssess the severity of this presentation and determine the appropriate level of care. Identify any immediate life threats and red flags.\n\n### Input:\n{\"symptoms\": [\"altered consciousness\", \"seizures\", \"fever\", \"pallor\"], \"duration_days\": 1, \"patient_age_group\": \"child\", \"sex\": \"female\"}\n\n### Response:\n"
+      }
+    ],
+    "model": {
+      "name": "aletheia_q4km",
+      "runtime": "llama.cpp (CPU only, -ngl 0)",
+      "quantization": "Q4_K_M",
+      "parameters_estimate": "3B",
+      "packaging": "binary_bundle"
+    }
+  },
+  "environment": {
+    "measured_on": "participant_laptop",
+    "cpu_model": "Intel(R) Core(TM) i5-8350U CPU @ 1.70GHz",
+    "ram_gb": 7.8,
+    "gpu": "none",
+    "os": "Ubuntu 22.04.5 LTS"
+  },
+  "throughput": {
+    "tokens_per_second_generation": 3.71,
+    "first_token_latency_ms": 32725.49,
+    "prompt_tokens": 512,
+    "generated_tokens": 128
+  },
+  "memory": {
+    "peak_rss_mb": 3273.07,
+    "steady_state_rss_mb": 3155.12,
+    "peak_vms_mb": 3757.47
+  },
+  "accuracy": [],
+  "cpu_thermal": {
+    "cpu_percent_p99": 90.5,
+    "core_temp_c_peak": null,
+    "throttled": false
+  },
+  "reproducibility": {
+    "git_commit_sha": "0941db6386e9",
+    "docker_image_digest": "unknown",
+    "random_seed": 42
+  },
+  "model_info": {
+    "params_count": null,
+    "context_length": 32768,
+    "architecture": "qwen2",
+    "claimed_params_estimate": "3B",
+    "params_match": true
+  }
+}
